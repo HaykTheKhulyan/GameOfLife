@@ -2,8 +2,7 @@
 #include "Cell.h"
 #include "SFML\Graphics.hpp"
 
-class CellGrid
-{
+class CellGrid {
 public:
 	CellGrid();
 	~CellGrid();

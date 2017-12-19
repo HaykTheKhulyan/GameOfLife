@@ -1,8 +1,8 @@
 /* Game of Life
 
 Future Features:
-	-pencil/eraser to intuitively draw or erase
-	-modifiable generation speed
+	-pencil/eraser to intuitively draw or erase (DONE)
+	-modifiable generation speed (first implement slider, then a custom entered number as well)
 	-save/load templates
 	-modifiable grid size?
 */
@@ -25,7 +25,7 @@ int main() {
 	pauseButton.setTexture(&pauseButtonTexture);
 	pauseButton.setSize(sf::Vector2f(80.0f, 60.0f));
 	pauseButton.setOrigin(40.0f, 30.0f);
-	pauseButton.setPosition(sf::Vector2f(950.0f, 50.0f));
+	pauseButton.setPosition(950.0f, 50.0f);
 	
 	sf::Texture	playButtonTexture;
 	playButtonTexture.loadFromFile("playButton.png");
@@ -34,16 +34,7 @@ int main() {
 	playButton.setTexture(&playButtonTexture);
 	playButton.setSize(sf::Vector2f(80.0f, 60.0f));
 	playButton.setOrigin(40.0f, 30.0f);
-	playButton.setPosition(sf::Vector2f(950.0f, 125.0f));
-
-	sf::Texture	clearButtonTexture;
-	clearButtonTexture.loadFromFile("clearButton.png");
-
-	sf::RectangleShape clearButton;
-	clearButton.setTexture(&clearButtonTexture);
-	clearButton.setSize(sf::Vector2f(80.0f, 60.0f));
-	clearButton.setOrigin(40.0f, 30.0f);
-	clearButton.setPosition(sf::Vector2f(950.0f, 200.0f));
+	playButton.setPosition(950.0f, 125.0f);
 
 	sf::Texture	pencilButtonTexture;
 	pencilButtonTexture.loadFromFile("pencilButton.png");
@@ -52,7 +43,7 @@ int main() {
 	pencil.setTexture(&pencilButtonTexture);
 	pencil.setSize(sf::Vector2f(20.0f, 20.0f));
 	pencil.setOrigin(10.0f, 10.0f);
-	pencil.setPosition(sf::Vector2f(920.0f, 255.0f));
+	pencil.setPosition(920.0f, 180.0f);
 
 	sf::Texture	eraserButtonTexture;
 	eraserButtonTexture.loadFromFile("eraserButton.png");
@@ -61,7 +52,7 @@ int main() {
 	eraser.setTexture(&eraserButtonTexture);
 	eraser.setSize(sf::Vector2f(20.0f, 20.0f));
 	eraser.setOrigin(10.0f, 10.0f);
-	eraser.setPosition(sf::Vector2f(950.0f, 255.0f));
+	eraser.setPosition(950.0f, 180.0f);
 
 	sf::Texture	trashButtonTexture;
 	trashButtonTexture.loadFromFile("trashButton.png");
@@ -70,25 +61,46 @@ int main() {
 	trash.setTexture(&trashButtonTexture);
 	trash.setSize(sf::Vector2f(20.0f, 20.0f));
 	trash.setOrigin(10.0f, 10.0f);
-	trash.setPosition(sf::Vector2f(980.0f, 255.0f));
+	trash.setPosition(980.0f, 180.0f);
+
+	sf::Texture sliderFrameTexture;
+	sliderFrameTexture.loadFromFile("sliderFrame.png");
+
+	sf::RectangleShape sliderFrame;
+	sliderFrame.setTexture(&sliderFrameTexture);
+	sliderFrame.setSize(sf::Vector2f(20.0f, 90.0f));
+	sliderFrame.setOrigin(10.0f, 45.0f);
+	sliderFrame.setPosition(930.0f, 260.0f);
+
+
+
+
+
+
+
 
 	CellGrid grid;
 
-	bool pencil2 = true;
 	bool mousePressed = false;
-	bool killing;
+	bool killing = false;
 
+	// keeps track of the time since the last update
 	float deltaTime = 0.0f;
 	sf::Clock clock;
 
+	float cycleTime = 0.5f;
+
 	while (window.isOpen()) {
+		// this restarts the clock and adds the elapsed time since the last restart to deltaTime
 		deltaTime += clock.restart().asSeconds();
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == event.MouseButtonReleased) {
+			else if (event.type == event.MouseButtonPressed)
+				mousePressed = true;
+			else if (event.type == event.MouseButtonReleased) {
 				mousePressed = false;
 				if (sf::Mouse::getPosition(window).x > 910 && sf::Mouse::getPosition(window).x < 990 && sf::Mouse::getPosition(window).y > 20 && sf::Mouse::getPosition(window).y < 80) {
 					std::cout << "Pressed pause" << std::endl; 
@@ -98,19 +110,20 @@ int main() {
 					std::cout << "Pressed play" << std::endl;
 					grid.play();
 				}
-				else if (sf::Mouse::getPosition(window).x > 910 && sf::Mouse::getPosition(window).x < 990 && sf::Mouse::getPosition(window).y > 170 && sf::Mouse::getPosition(window).y < 230) {
+				else if (sf::Mouse::getPosition(window).x > 910 && sf::Mouse::getPosition(window).x < 930 && sf::Mouse::getPosition(window).y > 170 && sf::Mouse::getPosition(window).y < 190) {
+					std::cout << "Pressed pencil" << std::endl;
+					killing = false;
+				}
+				else if (sf::Mouse::getPosition(window).x > 940 && sf::Mouse::getPosition(window).x < 960 && sf::Mouse::getPosition(window).y > 170 && sf::Mouse::getPosition(window).y < 190) {
+					std::cout << "Pressed eraser" << std::endl;
+					killing = true;
+				}
+				else if (sf::Mouse::getPosition(window).x > 970 && sf::Mouse::getPosition(window).x < 990 && sf::Mouse::getPosition(window).y > 170 && sf::Mouse::getPosition(window).y < 190) {
 					std::cout << "Pressed clear" << std::endl;
 					grid.clear();
 				}
-			}
-			if (event.type == event.MouseButtonPressed) {
-				if (grid.isAlive(sf::Mouse::getPosition(window)) && !mousePressed)
-					killing = true;
-				else
-					killing = false;
-				mousePressed = true;
-			}
-				
+
+			}	
 		}
 
 		if (mousePressed) {
@@ -128,10 +141,9 @@ int main() {
 			}
 		}
 
-		//std::cout << sf::Mouse::getPosition(window).x << "   " << sf::Mouse::getPosition(window).y << std::endl;
-
-		if (deltaTime > 0.5f) {
+		if (deltaTime > cycleTime) {
 			grid.Update();
+			// sets deltaTime = to zero, thereby "ending" the current cycle 
 			deltaTime = 0;
 		}
 
@@ -139,10 +151,10 @@ int main() {
 
 		window.draw(pauseButton);
 		window.draw(playButton);
-		window.draw(clearButton);
 		window.draw(pencil);
 		window.draw(eraser);
 		window.draw(trash);
+		window.draw(sliderFrame);
 
 		grid.Draw(window);
 		drawGraph(window);

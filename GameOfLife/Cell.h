@@ -1,8 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 
-class Cell
-{
+class Cell {
 public:
 	Cell();
 	~Cell();

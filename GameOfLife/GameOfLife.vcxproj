@@ -121,10 +121,12 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellGrid.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Slider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellGrid.h" />
+    <ClInclude Include="Slider.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
