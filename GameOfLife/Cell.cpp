@@ -2,7 +2,7 @@
 
 Cell::Cell() {
 	cell.setSize(sf::Vector2f(28.0f, 28.0f));
-	cell.setFillColor(sf::Color(255, 0, 0));
+	cell.setFillColor(sf::Color(255, 255, 0));
 	cell.setOrigin(14.0f, 14.0f);
 	cell.setPosition(sf::Vector2f(500.0f, 500.0f));
 }

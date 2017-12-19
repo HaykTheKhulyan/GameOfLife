@@ -23,7 +23,7 @@ void CellGrid::Update() {
 		for (int i = 0; i < 30; i++)
 			for (int j = 0; j < 30; j++) {
 				num = numNeighbors(i, j);
-				std::cout << num << std::endl;
+				//std::cout << num << std::endl;
 				if (grid[i][j].isAlive) {
 					if (num == 0 || num == 1 || num == 4 || num == 5 || num == 6 || num == 7 || num == 8)
 						grid[i][j].kill();
@@ -66,12 +66,44 @@ void CellGrid::cellPressed(sf::Vector2i mousePosition) {
 	}
 }
 
+void CellGrid::kill(sf::Vector2i mousePosition) {
+	int cellRow = mousePosition.y / 30;
+	int cellCol = mousePosition.x / 30;
+
+	grid[cellRow][cellCol].kill();
+}
+
+void CellGrid::giveLife(sf::Vector2i mousePosition) {
+	int cellRow = mousePosition.y / 30;
+	int cellCol = mousePosition.x / 30;
+
+	grid[cellRow][cellCol].giveLife();
+}
+
+bool CellGrid::isAlive(sf::Vector2i mousePosition) {
+	int cellRow = mousePosition.y / 30;
+	int cellCol = mousePosition.x / 30;
+
+	if (grid[cellRow][cellCol].isAlive)
+		return true;
+	else
+		return false;
+}
+
 void CellGrid::pause() {
 	isRunning = false;
 }
 
 void CellGrid::play() {
 	isRunning = true;
+}
+
+void CellGrid::clear() {
+	for (int i = 0; i < 30; i++)
+		for (int j = 0; j < 30; j++) {
+			grid[i][j].isAlive = false;
+		}
+	isRunning = false;
 }
 
 int CellGrid::numNeighbors(int row, int col)
