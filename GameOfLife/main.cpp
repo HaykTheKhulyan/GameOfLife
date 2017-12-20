@@ -1,7 +1,7 @@
 /* Game of Life
 
 Future Features:
-	-pencil/eraser to intuitively draw or erase (DONE)
+	-pencil/eraser to intuitively draw or erase		(DONE)
 	-modifiable generation speed (first implement slider, then a custom entered number as well)
 	-save/load templates
 	-modifiable grid size?
@@ -9,6 +9,7 @@ Future Features:
 
 #include <SFML/Graphics.hpp>
 #include "CellGrid.h"
+#include "Slider.h"
 #include <iostream>
 
 void drawGraph(sf::RenderWindow& window);
@@ -63,23 +64,8 @@ int main() {
 	trash.setOrigin(10.0f, 10.0f);
 	trash.setPosition(980.0f, 180.0f);
 
-	sf::Texture sliderFrameTexture;
-	sliderFrameTexture.loadFromFile("sliderFrame.png");
-
-	sf::RectangleShape sliderFrame;
-	sliderFrame.setTexture(&sliderFrameTexture);
-	sliderFrame.setSize(sf::Vector2f(20.0f, 90.0f));
-	sliderFrame.setOrigin(10.0f, 45.0f);
-	sliderFrame.setPosition(930.0f, 260.0f);
-
-
-
-
-
-
-
-
 	CellGrid grid;
+	Slider slider;
 
 	bool mousePressed = false;
 	bool killing = false;
@@ -147,16 +133,17 @@ int main() {
 			deltaTime = 0;
 		}
 
-		window.clear(sf::Color::Black);
+		window.clear(sf::Color::White);
 
 		window.draw(pauseButton);
 		window.draw(playButton);
 		window.draw(pencil);
 		window.draw(eraser);
 		window.draw(trash);
-		window.draw(sliderFrame);
 
 		grid.Draw(window);
+		slider.Draw(window);
+
 		drawGraph(window);
 
 		window.display();
@@ -170,7 +157,7 @@ int main() {
 void drawGraph(sf::RenderWindow& window) {
 	sf::RectangleShape line;
 	line.setSize(sf::Vector2f(900.0f, 1.0f));
-	line.setFillColor(sf::Color::White);
+	line.setFillColor(sf::Color::Black);
 	line.setOrigin(450.0f, 0.5f);
 
 	for (int i = 0; i <= 900 / 30; i++) {
